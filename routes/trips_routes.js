@@ -130,8 +130,7 @@ tripsRouter.route('/:tripId/alarm/:tripDuration')
                 var alertSecs = trip.alertSeconds * 60
                 var duration = req.params.tripDuration
                 var interval = (duration - alertSecs) * 1000
-
-
+                var contact = req.user.contact
                 setTimeout(function() {
                     if(trip.method == "Email") { // if email run this 
                         transporter.sendMail(mailOptions, function (err, info) {
@@ -140,7 +139,7 @@ tripsRouter.route('/:tripId/alarm/:tripDuration')
                         })
                     } else if (trip.method == "Text") {
                         client.messages.create({
-                            to: '+1' + req.user.contact,
+                            to: '+1' + contact,
                             from: twilioNumber,
                             body: 'You are approaching your destination'
                         })
@@ -148,7 +147,7 @@ tripsRouter.route('/:tripId/alarm/:tripDuration')
                     } else if (trip.method == "Call") {
                         client.api.calls.create({
                             url: 'http://demo.twilio.com/docs/voice.xml',
-                            to: '+1' + req.user.contact,
+                            to: '+1' + contact,
                             from: twilioNumber
                         })
                         .then((call) => console.log(call.sid));
