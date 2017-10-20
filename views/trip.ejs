@@ -2,7 +2,7 @@
 <div id="map" style="width: 100%; height: 400px"></div>
 
 <!-- Start,End, Method,Timing -->
-<form method="patch">
+<form method="patch" id='tripSelectionForm'>
     <div class="row trans-radio-button-group">
         <div class="col-sm-6 trans-radio-button">
             <label class="radio-inline">
@@ -17,11 +17,11 @@
     </div>
     <div class="form-group">
       <label>Start Location</label>
-      <input type="text" class="form-control" id="start-location"   placeholder="Start Location" value="<%= trip.start || '' %>">
+      <input type="text" name="startLocation" class="form-control" id="start-location" placeholder="Start Location" >
     </div>
     <div class="form-group">
       <label>End Location</label>
-      <input type="text" class="form-control" id="end-location" placeholder="End Location" value="<%= trip.end || '' %>">
+      <input type="text" name="endLocation" class="form-control" id="end-location" placeholder="End Location" value="<%= trip.end || '' %>" >
     </div>
     <!-- need Method, Timing -->
     <!-- Upon click, add new field for method/timing -->
@@ -60,12 +60,13 @@
     
     </div>
     <br>
-    <button type="submit" class="btn btn-primary" id="update-trip-submit">Submit</button>
+    <p id="demo" style="color: red "></p>
+    <button type="submit" class="btn btn-primary" id="update-trip-submit" >Submit</button>
 </form>
 
-
-
 <script>
+        if($('#end-location').val()) $('#start-location').focus()
+        
         var thisTrip
         
         $.ajax({url:'/trips/<%= trip.id %>/json', method: 'get'}).done((res)=>{
@@ -228,3 +229,4 @@
             })
         }) 
 </script>
+

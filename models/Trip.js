@@ -2,8 +2,8 @@
 const
     mongoose = require('mongoose'),
     tripSchema = new mongoose.Schema({
-        start: {type: String, default: "Start Location", required: true},
-        end: {type: String, default: "End Location", required: true},
+        start: {type: String, default: ""},
+        end: {type: String, default: ""},
         //settings
         //method: "call" or "text"
         method: {type: String, default: "Text", required: true, enum: ['Call', 'Text']},
