@@ -11,6 +11,6 @@ const
         timing: {type: String, default: "By Time", required: true, enum: ['By Time', 'By Distance']},
         alertSeconds: {type: Number, default: 5},
         user: {type: mongoose.Schema.Types.ObjectId, ref: 'User'}
-    })
+    }, {timestamps: true})
 
 module.exports = mongoose.model('Trip', tripSchema)

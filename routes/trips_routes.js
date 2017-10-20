@@ -12,65 +12,54 @@ tripsRouter.route('/')
         //need to find by user
         //console.log(req)
 
-        Trip.find({user: req.user}, (err, trips) => {
          
-            //look through user's trips and find top 3 destinations
-            if(err) {
-                 res.json(err)
-            } 
-            else{
-                Trip.aggregate([
-                    {
-                        $match: {
-                            user: req.user._id
+        //look through user's trips and find top 3 destinations
+           
+        Trip.aggregate([
+            {
+                $match: {
+                    user: req.user._id
+                }
+            },
+            {
+                $group: {
+                _id: "$end", count: { $sum: 1 }
                         }
-                    },
-                    {
-                        $group: {
-                        _id: "$end", count: { $sum: 1 }
-                                }
-                    },
-                    { 
-                        $sort: { 
-                        count: -1 
-                                } 
-                    },
-                    {
-                        $limit : 3
-                    }
-
-                    ])
-                .exec(function(err, aggregatedTrips){
-                    if(err)console.log(err)
-                    console.log(aggregatedTrips)
-                    res.render('trip_selection', {trips: trips, sortedEnds: aggregatedTrips})
-                })
+            },
+            { 
+                $sort: { 
+                count: -1 
+                        } 
+            },
+            {
+                $limit : 3
             }
 
-  
+        ])
+        .exec(function(err, aggregatedTrips){
+            if(err)console.log(err)
+            console.log(aggregatedTrips)
+            res.render('trip_selection', {sortedEnds: aggregatedTrips})
         })
-        
     })
-
-
 
     // send a array of three trips
     //need to post to user
     .post((req, res) => {
-        console.log(req.body)
-        res.render('trip', {trip: req.body.trip})
-        // var newTrip = new Trip()
-        // newTrip.user = req.user
-        // newTrip.save((err, trip) => {
-        //     if(err){
-        //         res.json(err)
-        //     }
-        //     //else redirect to new page showing info from latest trip in db
-        //     else {
-        //         console.log(newTrip)
-        //         res.render('trip', {trip: req.body.trip})
-        //     }
-        // })
+        var newTrip = new Trip()
+        if(req.body.end){
+            newTrip.end = req.body.end
+        }
+        newTrip.user = req.user
+        newTrip.save((err, trip) => {
+        if(err){
+                 res.json(err)
+             }
+             else {
+                 console.log(newTrip)
+                 res.redirect(`/trips/${newTrip.id}`)
+             }
+         })
     })
     
     //add get

@@ -1,21 +1,20 @@
-<!-- <p>All trips here</p>
-<% trips.forEach(function(trip) {   %>
-     <%= trip %> <br> 
-<% })                              %>  -->
 
-<p style="font-family: 'Pacifico', cursive; font-size: 18px">Your top 3 popular destinations</p>
+<p id="popular-trips">Your Top Destinations</p>
 
-<% sortedEnds.forEach(function(element) {   %>
-    <form method="post" action="/trips" >
-        <input type="hidden" name="trip" value="<%= element._id %>">
-        <button class="btn btn-primary"  style="margin-bottom: 4px; width:100%"><%= `${element._id}` %></button> 
+
+
+<% sortedEnds.forEach(function(element) {  %>
+    <!-- when clicked should pass element.id to save in route -->
+    <form method="post" action="/trips">
+        <input type="hidden" name="end" value="<%= element._id %>">
+        <button class="btn btn-primary trip-button" ><%= `${element._id}` %></button> 
     </form>
-<%  })                                      %>
+<%  })  %>
 
 <!-- must discrern routes -->
 <form method="post" action="/trips" >
-    <input type="hidden" name="trip" value="">
-    <button class= "btn" type="submit" style="width:100%">New Trip</button>
+    <input type="hidden" name="trip">
+    <button class= "btn trip-button" type="submit" >New Trip</button>
 </form>
 
 

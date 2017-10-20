@@ -23,3 +23,14 @@
 .trans-radio-button-group{
     margin: 12px 0 12px 0
 }
+#popular-trips{
+    font-family: 'Pacifico', cursive;
+    font-size: 18px;
+    text-align: center
+}
+.trip-button{
+    height: 25%;
+    width: 100%;
+    max-height: 150px;
+    margin-bottom: 4px;
+}

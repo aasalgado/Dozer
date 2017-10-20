@@ -17,11 +17,11 @@
     </div>
     <div class="form-group">
       <label>Start Location</label>
-      <input type="text" class="form-control" id="start-location"   placeholder="Start Location">
+      <input type="text" class="form-control" id="start-location"   placeholder="Start Location" value="<%= trip.start || '' %>">
     </div>
     <div class="form-group">
       <label>End Location</label>
-      <input type="text" class="form-control" id="end-location" value="<%= trip %>" placeholder="End Location">
+      <input type="text" class="form-control" id="end-location" placeholder="End Location" value="<%= trip.end || '' %>">
     </div>
     <!-- need Method, Timing -->
     <!-- Upon click, add new field for method/timing -->
@@ -176,9 +176,7 @@
             $('<br><button>Hey</button>').insertAfter($addResponseEl)
             console.log('I was clicked')
         })
-    
-        
-        
+
         //upon click, append the new fields to form
         $updateTrip.click((evt)=>{
             evt.preventDefault()
