@@ -99,30 +99,31 @@ tripsRouter.route('/:tripId/json')
         })
     })
 
-var transporter = nodemailer.createTransport({ 
-    service: 'gmail',
-    auth: {
-        user: process.env.GMAIL_EMAIL,
-        pass: process.env.GMAIL_PASSWORD
-    }
-})
-
-var currentTime = new Date(new Date().getTime()).toLocaleTimeString();
-const mailOptions = {
-    from: process.env.GMAIL_EMAIL, // sender address
-    to: 'dlorahoes@yahoo.com', // list of receivers
-    subject: `Im hungry`, // Subject line
-    html: `<p>${currentTime}</p>`// plain text body
-};
-
-const
-    accountSid = process.env.TWILIO_ACCOUNT_SID,
-    authToken = process.env.TWILIO_AUTH_TOKEN,
-    twilioNumber = process.env.TWILIO_NUMBER,
-    client = new twilio(accountSid, authToken)
 
 tripsRouter.route('/:tripId/alarm/:tripDuration') 
     .get((req, res) => {
+        var transporter = nodemailer.createTransport({ 
+            service: 'gmail',
+            auth: {
+                user: process.env.GMAIL_EMAIL,
+                pass: process.env.GMAIL_PASSWORD
+            }
+        })
+        
+        var currentTime = new Date(new Date().getTime()).toLocaleTimeString();
+        const mailOptions = {
+            from: process.env.GMAIL_EMAIL, // sender address
+            to: req.user.email, // list of receivers
+            subject: `Dozer`, // Subject line
+            html: `<p>You are approaching your destination</p>`// plain text body
+        };
+        
+        const
+            accountSid = process.env.TWILIO_ACCOUNT_SID,
+            authToken = process.env.TWILIO_AUTH_TOKEN,
+            twilioNumber = process.env.TWILIO_NUMBER,
+            client = new twilio(accountSid, authToken)
+        
         Trip.findById(req.params.tripId, (err, trip) => {
             if(err) {
                 res.json(err)
@@ -130,6 +131,8 @@ tripsRouter.route('/:tripId/alarm/:tripDuration')
                 var alertSecs = trip.alertSeconds * 60
                 var duration = req.params.tripDuration
                 var interval = (duration - alertSecs) * 1000
+
+
                 setTimeout(function() {
                     if(trip.method == "Email") { // if email run this 
                         transporter.sendMail(mailOptions, function (err, info) {
@@ -138,15 +141,15 @@ tripsRouter.route('/:tripId/alarm/:tripDuration')
                         })
                     } else if (trip.method == "Text") {
                         client.messages.create({
-                            to: '+12133276225',
-                            // from: twilioNumber,
-                            body: 'WSUP'
+                            to: '+1' + req.user.contact,
+                            from: twilioNumber,
+                            body: 'You are approaching your destination'
                         })
                         .then((message) => console.log(message.sid));
                     } else if (trip.method == "Call") {
                         client.api.calls.create({
                             url: 'http://demo.twilio.com/docs/voice.xml',
-                            to: '+12133276225',
+                            to: '+1' + req.user.contact,
                             from: twilioNumber
                         })
                         .then((call) => console.log(call.sid));
