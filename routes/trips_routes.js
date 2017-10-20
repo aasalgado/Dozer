@@ -46,11 +46,13 @@ tripsRouter.route('/')
     // send a array of three trips
     //need to post to user
     .post((req, res) => {
+        console.log(req.body)
         var newTrip = new Trip()
         if(req.body.end){
             newTrip.end = req.body.end
         }
         newTrip.user = req.user
+        console.log(newTrip)
         newTrip.save((err, trip) => {
         if(err){
                  res.json(err)
